@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\..\\..\\..\\..\\..\\Users\\user\\Desktop\\practice"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\..\\.."
+		}
+	],
+	"settings": {
+		"java.home": "C:\\Program Files\\Java\\jdk-11.0.8\\",
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
+}
