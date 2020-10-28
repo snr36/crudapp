@@ -39,13 +39,13 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customerDao = null;
         customerDao = customerrepository.findById(customerId).orElse(null);
         CustomerDto customerDto ;
+
         if(customerDao != null){
             customerDto = convertToDto(customerDao);
         }
         else{
             customerDto = null;
         } 
-        
         return customerDto; 
     }
 
