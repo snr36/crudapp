@@ -14,10 +14,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Customer  {
 
     @Id
-    @NotNull
     private Integer id; 
 
-    @NotNull
     @NotEmpty
     private String name;
 
@@ -26,8 +24,12 @@ public class Customer  {
     @Max(3)
     private Integer tier;
 
-    public Customer() {
-        
+    public Customer() { }
+
+    public Customer(Integer id,String name,Integer tier) {
+        this.id = id;
+        this.name = name;
+        this.tier = tier; 
     }
 
     public Integer getId() {
@@ -53,6 +55,7 @@ public class Customer  {
     public void setTier(Integer tier) {
         this.tier = tier;
     }
+
 
     
    // @Override

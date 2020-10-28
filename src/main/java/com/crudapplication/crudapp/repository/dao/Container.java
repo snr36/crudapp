@@ -11,8 +11,7 @@ public class Container<T> {
         this.container = container;
     }
 
-    public Container() {
-    }
+    public Container() { }
 
     public List<T> getContainer() {
         return container;
@@ -26,8 +25,5 @@ public class Container<T> {
 		return container.size();
 	}
 
-    
-
-    
 	
 }

@@ -19,64 +19,32 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerRepository customerrepository;
 
     public CustomerDto convertToDto(Customer customer) {
-        ModelMapper modelMapper = new ModelMapper();
-        CustomerDto customerDto = new CustomerDto();
-        customerDto = modelMapper.map(customer, CustomerDto.class);
-        customerDto.setId(customer.getId());
-        customerDto.setName(customer.getName());
-        customerDto.setTier(customer.getTier());
-        return customerDto;
+        return new ModelMapper().map(customer, CustomerDto.class);
     }
    
-    
-    public List<CustomerDto> getCustomers(){
-        List<Customer> customers = customerrepository.findAll();
-        List<CustomerDto> customerDto = customers.stream().map(this :: convertToDto).collect(Collectors.toList());
-        return customerDto;
+    public List<CustomerDto> getCustomers(){ 
+        return customerrepository.findAll().stream().map(this :: convertToDto).collect(Collectors.toList());
     }  
 
     public CustomerDto getCustomerById(Integer customerId) {
-        Customer customerDao = null;
-        customerDao = customerrepository.findById(customerId).orElse(null);
-        CustomerDto customerDto ;
-
-        if(customerDao != null){
-            customerDto = convertToDto(customerDao);
-        }
-        else{
-            customerDto = null;
-        } 
-        return customerDto; 
+        Customer customerDao = customerrepository.findById(customerId).orElse(null);
+        return customerDao != null ? convertToDto(customerDao) : null ;
     }
 
     public CustomerDto addCustomer(CustomerRequest customerRequest){
-
-        Customer customerDao = new Customer();
-        customerDao.setId(customerRequest.getId());
-        customerDao.setName(customerRequest.getName());
-        customerDao.setTier(customerRequest.getTier()); 
+        Customer customerDao = new Customer(customerRequest.getId(),customerRequest.getName(),customerRequest.getTier());
         customerrepository.save(customerDao);
-
-        CustomerDto customerDto = convertToDto(customerDao);
-
-
-        return customerDto;
+        return convertToDto(customerDao);
     }
 
     public CustomerDto updateCustomer(CustomerRequest customerRequest){
-        
-        Customer customerDao = new Customer();
-        customerDao.setId(customerRequest.getId());
-        customerDao.setName(customerRequest.getName());
-        customerDao.setTier(customerRequest.getTier()); 
+        Customer customerDao = new Customer(customerRequest.getId(),customerRequest.getName(),customerRequest.getTier());
         customerrepository.save(customerDao); 
-        CustomerDto customerDto = convertToDto(customerDao); 
-
-        return customerDto;
+        return convertToDto(customerDao);  
     }
 
     public void deleteCustomer(Integer customerId) {
-        Customer customer = customerrepository.getOne(customerId);
-        customerrepository.delete(customer);
+        customerrepository.delete(customerrepository.getOne(customerId));
     }
 }
+  

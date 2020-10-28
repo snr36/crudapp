@@ -19,67 +19,33 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productrepository;
 
     private ProductDto convertToDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        ModelMapper modelMapper = new ModelMapper();
-        productDto = modelMapper.map(product,ProductDto.class);
-        productDto.setId(product.getId());
-        productDto.setPname(product.getPname());
-        productDto.setCost(product.getCost());
-        
-        return productDto;
+        return new ModelMapper().map(product,ProductDto.class);
     }
 
-
     public List<ProductDto> getProducts(){
-        List<Product> products = productrepository.findAll();
-        List<ProductDto> productDto= products.stream().map(this :: convertToDto).collect(Collectors.toList());
-
-        return productDto;
+        List<Product> product = productrepository.findAll();
+        return product.stream().map(this :: convertToDto).collect(Collectors.toList());
     }
  
     public ProductDto getProductById(Integer productId){
-        Product productDao = null;
-        productDao = productrepository.findById(productId).orElse(null);
-
-        ProductDto productDto ;
-        if(productDao != null){
-           productDto = convertToDto(productDao);
-        }
-        else {
-            productDto = null;
-        }
-        return productDto;
+        Product productDao = productrepository.findById(productId).orElse(null);
+        return productDao != null ? convertToDto(productDao) : null ;
     }
 
     public ProductDto addProduct(ProductRequest productRequest){
-
-        Product productDao = new Product();
-        productDao.setId(productRequest.getId());
-        productDao.setPname(productRequest.getPname());
-        productDao.setCost(productRequest.getCost());
+        Product productDao = new Product(productRequest.getId(),productRequest.getPname(),productRequest.getCost());
         productrepository.save(productDao);
-
-        ProductDto productDto = convertToDto(productDao);
-
-        return productDto;
+        return convertToDto(productDao);
     }
 
     public ProductDto updateProduct(ProductRequest productRequest){
-
-        Product productDao = new Product();
-        productDao.setId(productRequest.getId());
-        productDao.setPname(productRequest.getPname());
-        productDao.setCost(productRequest.getCost());
+        Product productDao = new Product(productRequest.getId(),productRequest.getPname(),productRequest.getCost());
         productrepository.save(productDao);
-        
-        ProductDto productDto = convertToDto(productDao);
-
-        return productDto;
+        return convertToDto(productDao);
     } 
 
     public void deleteProduct(Integer productId) {
-        Product productDao = productrepository.getOne(productId);
-        productrepository.delete(productDao);
+        productrepository.delete(productrepository.getOne(productId));
     }
     
 } 

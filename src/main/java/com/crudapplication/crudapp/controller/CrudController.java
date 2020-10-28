@@ -46,8 +46,8 @@ public class CrudController {
         log.trace("A TRACE Message");
         return "Welcome to crudapp";
     }
-
-    @GetMapping("/customers")
+ 
+    @GetMapping("/customers") 
     public ResponseEntity<Container<CustomerDto>> getCustomers(){
         log.trace("In getCustomers");
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(customerservice.getCustomers()));
@@ -115,29 +115,15 @@ public class CrudController {
 
     @DeleteMapping("/customers/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer customerId) {
-        try {
-            customerservice.deleteCustomer(customerId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        
+        customerservice.deleteCustomer(customerId);
+        return ResponseEntity.status(HttpStatus.OK).build(); 
     }
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
-        try {
-            productservice.deleteProduct(productId);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); 
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        
-    }
+        productservice.deleteProduct(productId);
+        return ResponseEntity.status(HttpStatus.OK).build(); 
+    } 
 
 
 } 

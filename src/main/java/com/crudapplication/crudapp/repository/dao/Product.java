@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Product {
 
     @Id
-    @NotNull
     Integer id;
 
     @NotBlank
@@ -21,8 +20,12 @@ public class Product {
     @NotNull
     Integer cost;
 
-    public Product() {
-      // super();
+    public Product() { }
+
+    public Product(Integer id,String pname,Integer cost) {
+        this.id = id;
+        this.pname = pname;
+        this.cost = cost;
     }
 
     public Integer getId() {
@@ -48,4 +51,5 @@ public class Product {
     public void setCost(Integer cost) {
         this.cost = cost;
     }
+
 }
