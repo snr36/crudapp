@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.crudapplication.crudapp.controller.Requests.CustomerRequest;
 import com.crudapplication.crudapp.dto.CustomerDto;
-//import com.crudapplication.crudapp.repository.dao.Customer;
 
 public interface CustomerService {
 
@@ -14,3 +13,4 @@ public interface CustomerService {
     public CustomerDto updateCustomer(CustomerRequest customerRequest); 
     public void deleteCustomer(Integer customerId);
 }
+ 

@@ -43,85 +43,104 @@ public class CrudController {
 
     @GetMapping("/home")
     public String home(){
-        log.trace("A TRACE Message");
+        log.debug("Accessing home method");
         return "Welcome to crudapp";
     }
  
     @GetMapping("/customers") 
     public ResponseEntity<Container<CustomerDto>> getCustomers(){
-        log.trace("In getCustomers");
-        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(customerservice.getCustomers()));
+        log.debug("Accessing getCustomers method");
+        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(customerservice.getCustomers())); 
     } 
  
     @GetMapping("/products")
     public ResponseEntity<Container<ProductDto>> getProducts() {
-
-       Container<ProductDto> product = new Container<>(productservice.getProducts());
-
+        Container<ProductDto> product = new Container<>(productservice.getProducts());
+        log.debug("Accessing getProducts method");
         if(product.size() <= 0){
+            log.error("No products found.List size is 0");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        log.info("All products retrieved");
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
 
     @GetMapping("customers/{customerId}")
     public ResponseEntity<Container<CustomerDto>> getCustomerById(@PathVariable("customerId") Integer customerId) {
+        log.debug("In getCustomerById method");
+        CustomerDto customerDto = customerservice.getCustomerById(customerId);
 
-        CustomerDto customerdto = customerservice.getCustomerById(customerId);
-
-        if(customerdto != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerdto)));
+        if(customerDto != null) {
+            log.info("Customer with id {} is found",customerId);     
+            return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerDto)));
         }
-        else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        else{
+            log.error("Customer with id {} is not found",customerId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } 
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<Container<ProductDto>> getProductById(@PathVariable Integer productId) {
+        log.debug("In getProductById method");
+        ProductDto productDto = productservice.getProductById(productId);
 
-        ProductDto productdto = productservice.getProductById(productId);
-
-        if(productdto == null){
+        if(productDto == null){
+            log.error("Product with given id {} is not found", productId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productdto)));
+        log.info("Product with given id {} is found",productId);
+        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productDto)));
     }
 
  
-    @PostMapping("/customers")
+    @PostMapping("/customers")  
     public ResponseEntity<Container<CustomerDto>> addCustomer(@Valid @RequestBody CustomerRequest customer) {
-        CustomerDto customerdto = customerservice.addCustomer(customer);
-        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerdto)));
+        log.debug("In addCustomer method");
+        CustomerDto customerDto = customerservice.addCustomer(customer);
+        log.info("Customer with id {} is added successfully",customerDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerDto)));
     
     }
 
     @PostMapping("/products")
     public ResponseEntity<Container<ProductDto>> addProduct(@Valid @RequestBody ProductRequest product) {
-        ProductDto productdto = productservice.addProduct(product);
-        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productdto)));
+        log.debug("In addProduct method");
+        ProductDto productDto = productservice.addProduct(product);
+        log.info("Product with id {} is added successfully",productDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productDto)));
     }
 
     @PutMapping("/customers")
     public ResponseEntity<Container<CustomerDto>> updateCustomer(@Valid @RequestBody CustomerRequest customer) {
-        CustomerDto customerdto = customerservice.updateCustomer(customer);
-        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerdto)));
+        log.debug("In updateCustomer method");
+        CustomerDto customerDto = customerservice.updateCustomer(customer);
+        log.info("Customer with id {} is updated succesfully",customerDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerDto)));
     }
 
     @PutMapping("/products")
     public ResponseEntity<Container<ProductDto>> updateProduct(@Valid @RequestBody ProductRequest product) {
-        ProductDto productdto = productservice.updateProduct(product);
-        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productdto)));
+        log.debug("In updateProduct method");
+        ProductDto productDto = productservice.updateProduct(product);
+        log.info("Product with id {} is updated successfully",productDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productDto)));
     }
 
     @DeleteMapping("/customers/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer customerId) {
+        log.debug("In deleteCustomer method");
         customerservice.deleteCustomer(customerId);
+        log.info("Customer with id {} is deleted successfully",customerId);
         return ResponseEntity.status(HttpStatus.OK).build(); 
     }
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
+        log.debug("In deleteProduct method");
         productservice.deleteProduct(productId);
+        log.info("Product with id {} deleted successfully",productId);
         return ResponseEntity.status(HttpStatus.OK).build(); 
     } 
 
