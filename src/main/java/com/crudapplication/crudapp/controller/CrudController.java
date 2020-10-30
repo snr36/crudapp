@@ -61,7 +61,7 @@ public class CrudController {
             log.error("No products found.List size is 0");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        log.debug("retriving all products");
+        log.debug("retriving all products");   
         log.info("All products retrieved");
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
