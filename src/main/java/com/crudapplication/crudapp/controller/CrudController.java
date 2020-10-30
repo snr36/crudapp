@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import javax.validation.Valid;
 
-
 import com.crudapplication.crudapp.controller.Requests.CustomerRequest;
 import com.crudapplication.crudapp.controller.Requests.ProductRequest;
 import com.crudapplication.crudapp.dto.CustomerDto;
@@ -13,6 +12,7 @@ import com.crudapplication.crudapp.dto.ProductDto;
 import com.crudapplication.crudapp.repository.dao.Container;
 import com.crudapplication.crudapp.services.CustomerService;
 import com.crudapplication.crudapp.services.ProductService;
+import com.crudapplication.crudapp.utility.logs.LogData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,18 +49,19 @@ public class CrudController {
  
     @GetMapping("/customers") 
     public ResponseEntity<Container<CustomerDto>> getCustomers(){
-        log.debug("Accessing getCustomers method");
+        log.debug("Accessing getCustomers method in controller");
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(customerservice.getCustomers())); 
     } 
  
     @GetMapping("/products")
     public ResponseEntity<Container<ProductDto>> getProducts() {
         Container<ProductDto> product = new Container<>(productservice.getProducts());
-        log.debug("Accessing getProducts method");
+        log.debug("Accessing getProducts method in controller");
         if(product.size() <= 0){
             log.error("No products found.List size is 0");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        log.debug("retriving all products");
         log.info("All products retrieved");
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
@@ -68,11 +69,12 @@ public class CrudController {
 
     @GetMapping("customers/{customerId}")
     public ResponseEntity<Container<CustomerDto>> getCustomerById(@PathVariable("customerId") Integer customerId) {
-        log.debug("In getCustomerById method");
+        log.debug("In getCustomerById method in controller");
         CustomerDto customerDto = customerservice.getCustomerById(customerId);
 
         if(customerDto != null) {
-            log.info("Customer with id {} is found",customerId);     
+            log.debug("Getting customer with id {}",customerId);
+            log.info("Customer with id {} is found",customerId);  
             return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerDto)));
         }
         else{
@@ -83,13 +85,14 @@ public class CrudController {
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<Container<ProductDto>> getProductById(@PathVariable Integer productId) {
-        log.debug("In getProductById method");
+        log.debug("In getProductById method in controller");
         ProductDto productDto = productservice.getProductById(productId);
 
         if(productDto == null){
             log.error("Product with given id {} is not found", productId);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        log.debug("Getting product with id {} ",productId);
         log.info("Product with given id {} is found",productId);
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productDto)));
     }
@@ -97,8 +100,9 @@ public class CrudController {
  
     @PostMapping("/customers")  
     public ResponseEntity<Container<CustomerDto>> addCustomer(@Valid @RequestBody CustomerRequest customer) {
-        log.debug("In addCustomer method");
+        log.debug("In addCustomer method in controller");
         CustomerDto customerDto = customerservice.addCustomer(customer);
+        log.debug("Adding customer with id {} ",customerDto.getId());
         log.info("Customer with id {} is added successfully",customerDto.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerDto)));
     
@@ -106,7 +110,7 @@ public class CrudController {
 
     @PostMapping("/products")
     public ResponseEntity<Container<ProductDto>> addProduct(@Valid @RequestBody ProductRequest product) {
-        log.debug("In addProduct method");
+        log.debug("In addProduct method in controller");
         ProductDto productDto = productservice.addProduct(product);
         log.info("Product with id {} is added successfully",productDto.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productDto)));
@@ -114,7 +118,7 @@ public class CrudController {
 
     @PutMapping("/customers")
     public ResponseEntity<Container<CustomerDto>> updateCustomer(@Valid @RequestBody CustomerRequest customer) {
-        log.debug("In updateCustomer method");
+        log.debug("In updateCustomer method in controller");
         CustomerDto customerDto = customerservice.updateCustomer(customer);
         log.info("Customer with id {} is updated succesfully",customerDto.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(customerDto)));
@@ -122,7 +126,7 @@ public class CrudController {
 
     @PutMapping("/products")
     public ResponseEntity<Container<ProductDto>> updateProduct(@Valid @RequestBody ProductRequest product) {
-        log.debug("In updateProduct method");
+        log.debug("In updateProduct method in controller");
         ProductDto productDto = productservice.updateProduct(product);
         log.info("Product with id {} is updated successfully",productDto.getId());
         return ResponseEntity.status(HttpStatus.OK).body(new Container<>(Arrays.asList(productDto)));
@@ -130,7 +134,7 @@ public class CrudController {
 
     @DeleteMapping("/customers/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer customerId) {
-        log.debug("In deleteCustomer method");
+        log.debug("In deleteCustomer method in controller");
         customerservice.deleteCustomer(customerId);
         log.info("Customer with id {} is deleted successfully",customerId);
         return ResponseEntity.status(HttpStatus.OK).build(); 
@@ -138,7 +142,7 @@ public class CrudController {
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
-        log.debug("In deleteProduct method");
+        log.debug("In deleteProduct method in controller");
         productservice.deleteProduct(productId);
         log.info("Product with id {} deleted successfully",productId);
         return ResponseEntity.status(HttpStatus.OK).build(); 
