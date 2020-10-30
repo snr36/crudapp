@@ -65,7 +65,7 @@ public class CrudController {
         log.info("All products retrieved");
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
-
+  
 
     @GetMapping("customers/{customerId}")
     public ResponseEntity<Container<CustomerDto>> getCustomerById(@PathVariable("customerId") Integer customerId) {
